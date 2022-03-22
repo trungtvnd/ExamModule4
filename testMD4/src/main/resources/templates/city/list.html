@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style th:replace="/layout :: css"></style>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<h2><strong>List Cities</strong></h2>
+<div>
+<button style="color: white; text-decoration: none" class="btn btn-primary"><a  style="text-decoration: none; color: white" th:href="@{/city/create}">Create new City</a></button><br><br>
+
+<form th:action="@{/city/list}" method="get">
+    <label>Search By Name:
+        <input style="width: 150px; height: 30px" type="text" name="search" th:value="${search}">
+    </label>
+
+    <button type="submit">Search</button>
+</form><br>
+</div>
+
+<table id="products">
+    <tr>
+        <th>Name</th>
+        <th>Area</th>
+        <th>Population</th>
+        <th>Gdp</th>
+        <th>Description</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <th>View</th>
+    </tr>
+    <tr th:each="c : ${cities}">
+        <td th:text="${c.getName()}"></td>
+        <td th:text="${c.getArea()}"></td>
+        <td th:text="${c.population}"></td>
+        <td th:text="${c.getGdp()}"></td>
+        <td th:text="${c.getDescription()}"></td>
+        <td><button style="color: white; text-decoration: none" class="btn btn-success"><a style="text-decoration: none" th:href="@{/city/edit/{id}(id=${c.getId()})}" >Edit</a></button></td>
+        <td><button style="color: white; text-decoration: none"  class="btn btn-danger"><a style="text-decoration: none" th:href="@{/city/delete/{id}(id=${c.getId()})}"
+                                              onclick="return confirm('Are you sure to want to Delete?')">Delete</a></button></td>
+        <td><button style="color: white; text-decoration: none"  class="btn btn-warning"><a style="text-decoration: none" th:href="@{/city/view/{id}(id=${c.getId()})}">View</a></button></td>
+    </tr>
+</table>
+<br>
+<div>
+    <a th:href="@{/city(page=${cities.number - 1},search=${search})}"
+       th:if="${cities.hasPrevious()}"><span>Previous</span></a>
+    <span th:text="${cities.number + 1} + '/' + ${cities.totalPages}"></span>
+    <a th:href="@{/city(page=${cities.number + 1},search=${search})}"
+       th:if="${cities.hasNext()}"><span>Next</span></a>
+</div>
+<footer th:replace="/layout::footer"></footer>
+</body>
+</html>
